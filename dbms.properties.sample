@@ -1,7 +1,0 @@
-EPERSON_ID = 1
-DB_ENGINE = postgresql
-DB_HOSTNAME = localhost
-DB_PORT = 5432
-DB_DATABASE = dspace
-DB_USERNAME = dspace
-DB_PASSWORD = dspace
