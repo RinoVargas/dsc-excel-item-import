@@ -79,7 +79,7 @@ def db_connect():
 
 def get_single_value_from_db(SQL, conn, default_value):
     dfRecord = pd.read_sql(SQL, conn)
-    if len(dfRecord) != 1:
+    if len(dfRecord) != 1 or dfRecord.at[0,'max'] is None:
         result = default_value
     else:
         result = dfRecord.iloc[0, 0]
