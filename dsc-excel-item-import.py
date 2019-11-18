@@ -2,18 +2,6 @@
 # -*- coding: utf-8 -*-
 
 #
-# CONFIGURATION
-#
-
-EPERSON_ID = 1
-DB_ENGINE = 'postgresql'
-DB_HOSTNAME = 'localhost'
-DB_PORT = 5432
-DB_DATABASE = 'dspace'
-DB_USERNAME = 'dspace'
-DB_PASSWORD = 'dspace'
-
-#
 # SCRIPT
 #
 
@@ -27,6 +15,19 @@ import os
 import re
 import pandas as pd
 import sqlalchemy
+from configuration import properties
+
+#
+# CONFIGURATION
+#
+
+EPERSON_ID = properties['EPERSON_ID']
+DB_ENGINE = properties['DB_ENGINE']
+DB_HOSTNAME = properties['DB_HOSTNAME']
+DB_PORT = properties['DB_PORT']
+DB_DATABASE = properties['DB_DATABASE']
+DB_USERNAME = properties['DB_USERNAME']
+DB_PASSWORD = properties['DB_PASSWORD']
 
 
 DESCRIPTION = """
