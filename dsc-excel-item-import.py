@@ -122,7 +122,7 @@ def parse(data, db_data):
         if record['operation'] == 'update':
             for field in data['metadata_fields']:
                 (schema, element, qualifier, lang) = parse_metadata_field_name(field.strip())
-                for i, value in enumerate(row[field].split('|||')):
+                for i, value in enumerate(str(row[field]).split('|||')):
                     cur_metadatavalue_id += 1
                     (display_value, authority, confidence) = parse_metadata_value(value)
                     metadata_value = dict(
