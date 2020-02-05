@@ -2,18 +2,6 @@
 # -*- coding: utf-8 -*-
 
 #
-# CONFIGURATION
-#
-
-EPERSON_ID = 1
-DB_ENGINE = 'postgresql'
-DB_HOSTNAME = 'localhost'
-DB_PORT = 5432
-DB_DATABASE = 'dspace'
-DB_USERNAME = 'dspace'
-DB_PASSWORD = 'dspace'
-
-#
 # SCRIPT
 #
 
@@ -27,6 +15,7 @@ import os
 import re
 import pandas as pd
 import sqlalchemy
+from configuration import env
 
 
 DESCRIPTION = """
@@ -54,18 +43,18 @@ def load(filename):
 
 
 def db_connect():
-    if DB_ENGINE != "postgresql":
+    if env['DB_ENGINE'] != "postgresql":
         logger.error("DB Engine not yet supported: %s" % engine)
         raise NotImplementedError
 
     connString = '{engine}://{username}:{password}@{hostname}:{port}/{database}'
     connString = connString.format(
-            engine=DB_ENGINE,
-            username=DB_USERNAME,
-            password=DB_PASSWORD,
-            hostname=DB_HOSTNAME,
-            port=DB_PORT,
-            database=DB_DATABASE,
+            engine=env['DB_ENGINE'],
+            username=env['DB_USERNAME'],
+            password=env['DB_PASSWORD'],
+            hostname=env['DB_HOSTNAME'],
+            port=env['DB_PORT'],
+            database=env['DB_DATABASE'],
             )
     try:
         conn = sqlalchemy.create_engine(connString).connect()
@@ -76,15 +65,17 @@ def db_connect():
     
     return conn
 
-
 def get_single_value_from_db(SQL, conn, default_value):
     dfRecord = pd.read_sql(SQL, conn)
-    if len(dfRecord) != 1 or dfRecord.at[0,'max'] is None:
-        result = default_value
-    else:
-        result = dfRecord.iloc[0, 0]
-    return result
+    if len(dfRecord) != 1 or len(dfRecord.columns) != 1:
+        raise ValueError('SQL query should return a single value')
 
+    result = dfRecord.at[0,'max']
+
+    if result is None: # max() returned a null value (no records)
+        result = default_value
+
+    return result
 
 def get_db_data():
     conn = db_connect()
@@ -123,7 +114,7 @@ def parse(data, db_data):
             imp_id = cur_id,
             imp_record_id = row['SOURCEID'],
             imp_sourceref = row['SOURCEREF'],
-            imp_eperson_id = EPERSON_ID,
+            imp_eperson_id = env['EPERSON_ID'],
             imp_collection_id = int(row['collection']),
             status = 'z',
             operation = row['ACTION'].lower()
@@ -131,7 +122,7 @@ def parse(data, db_data):
         if record['operation'] == 'update':
             for field in data['metadata_fields']:
                 (schema, element, qualifier, lang) = parse_metadata_field_name(field.strip())
-                for i, value in enumerate(row[field].split('|||')):
+                for i, value in enumerate(str(row[field]).split('|||')):
                     cur_metadatavalue_id += 1
                     (display_value, authority, confidence) = parse_metadata_value(value)
                     metadata_value = dict(
