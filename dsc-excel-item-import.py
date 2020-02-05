@@ -109,7 +109,7 @@ def parse(data, db_data):
 
     for row in data['rows']:
         cur_id += 1
-        assert row['collection'], 'Missing collection value in row: ' + row
+        assert row['collection'], 'Missing collection value in row: {}, {}'.format(row['SOURCEREF'], row['SOURCEID'])
         record = dict(
             imp_id = cur_id,
             imp_record_id = row['SOURCEID'],
