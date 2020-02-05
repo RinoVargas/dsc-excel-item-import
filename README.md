@@ -1,9 +1,9 @@
 # dsc-excel-item-import
 Script for importing items into DSpace-CRIS from Excel files using DBMS Import framework
 
-DSpace-CRIS allows the import of CRIS objects using [XLS Import and Export tool](https://wiki.duraspace.org/display/DSPACECRIS/XLS+Import+and+Export+tool). Preparing information in XLS files is fairly straightforward, and allows for ingesting not only plain metadadata values but also pointers to other entities. This tool, however, does not work for native DSpace items.
+DSpace-CRIS allows the import of CRIS objects using [XLS Import and Export tool](https://wiki.duraspace.org/display/DSPACECRIS/XLS+Import+and+Export+tool). Preparing information in XLS files is fairly straightforward, and allows for ingesting not only plain metadadata values but also pointers to other entities. DSpace-CRIS XLS Import and Export tool, however, does not work for native DSpace items.
 
-There are different tools for importing native DSpace items, but in a DSpace-CRIS setting, it usually required to import values pointing to CRIS objects.
+There are different tools for importing native DSpace items, but in a DSpace-CRIS setting, it usually required to import values pointing to CRIS objects, which is not handled by those tools.
 
 CRIS objects are exposed to native DSpace items as authorities, but native [Batch Metadata Editing](https://wiki.duraspace.org/display/DSDOC5x/Batch+Metadata+Editing) does not allow the ingest of pointers to CRIS objects.
 
